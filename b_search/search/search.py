@@ -78,7 +78,10 @@ def depthFirstSearch(problem):
     path = []
     explored = set()
 
-    rootNode = [problem.getStartState(), []]
+    rootNode = [problem.getStartState(), list()]
+
+    from util import Stack
+    nodeStack = Stack()
 
     from util import Stack
     nodeStack = Stack()
@@ -153,7 +156,45 @@ def depthFirstSearch(problem):
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+    explored = set()
+    rootNode = [problem.getStartState(), list()]
+
+    from util import Queue
+    queueNode = Queue()
+
+    queueNode.push(rootNode)
+
+
+    while not queueNode.isEmpty():
+
+        currentNode = queueNode.pop()
+        currentState = currentNode[0]
+        currentPath = currentNode[1]
+        
+        explored.add(currentState)
+
+        if problem.isGoalState(currentState):
+            return currentPath
+
+        else:
+            children = problem.getSuccessors(currentState)            
+
+            for child in children:
+                childState = child[0]
+                
+                # Converts a tuple into list.
+                childPath = list(currentPath)
+
+                childPath.append(child[1])
+                
+                if childState not in explored:
+                    queueNode.push([child[0], childPath])
+
+
+    raise Exception, 'No solutions found'
+
+
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
