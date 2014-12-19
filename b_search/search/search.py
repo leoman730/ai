@@ -97,7 +97,8 @@ def depthFirstSearch(problem):
             return path
         else:
             children = problem.getSuccessors(node[0])
-            
+            # reverse_children = children[::-1]
+            # for child in reverse_children:
             for child in children:
                 if child[0] not in explored:
                     child_path = list(path)
