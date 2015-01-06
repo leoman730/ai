@@ -310,10 +310,11 @@ class CornersProblem(search.SearchProblem):
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-        corners = state[0]
+        corners = state[1]
 
+        print corners
         return corners[0] and corners[1] and corners[2] and corners[3]
-        
+
         util.raiseNotDefined()
 
     def getSuccessors(self, state):
@@ -337,18 +338,31 @@ class CornersProblem(search.SearchProblem):
             #   hitsWall = self.walls[nextx][nexty]
 
             "*** YOUR CODE HERE ***"
-            successors = []
-            for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
-                x,y = state
-                dx, dy = Actions.directionToVector(action)
-                nextx, nexty = int(x + dx), int(y + dy)
-                if not self.walls[nextx][nexty]:
-                    nextState = (nextx, nexty)
-                    cost = self.costFn(nextState)
-                    successors.append( ( nextState, action, cost) )            
+            toVisit = state[1]
+            x,y = state[0]
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+            hitsWall = self.walls[nextx][nexty]      
 
+            if not hitsWall:
+                if (nextx, nexty) in self.corners: # set that corner position to true
+                    if (nextx, nexty) == (1,1):
+                        visitedCorners = True, toVisit[1], toVisit[2], toVisit[3]
+                    elif (nextx, nexty) == (1,self.top):
+                        visitedCorners = toVisit[0], True, toVisit[2], toVisit[3]
+                    elif (nextx, nexty) == (self.right,1):
+                        visitedCorners = toVisit[0], toVisit[0], True, toVisit[3]
+                    elif (nextx, nexty) == (self.right,self.top):
+                        visitedCorners = toVisit[0], toVisit[1], toVisit[2], True                        
+
+                    succ = ((nextx,nexty), visitedCorners),action
+                else:
+                    succ = ((nextx,nexty), toVisit),action
+
+                successors.append(succ)
 
         self._expanded += 1 # DO NOT CHANGE
+        
         return successors
 
     def getCostOfActions(self, actions):

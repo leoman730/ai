@@ -157,22 +157,27 @@ def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
 
-    explored = set()
+    
     rootNode = [problem.getStartState(), list()]
 
     from util import Queue
     queueNode = Queue()
 
     queueNode.push(rootNode)
+    
+    start = problem.getStartState()
+    
+    print 'type of start is', type(rootNode)
 
-
+    explored = set([start[0]])
+    
     while not queueNode.isEmpty():
 
         currentNode = queueNode.pop()
         currentState = currentNode[0]
         currentPath = currentNode[1]
-        
-        explored.add(currentState)
+            
+        # explored.append(currentState)    
 
         if problem.isGoalState(currentState):
             return currentPath
@@ -183,12 +188,13 @@ def breadthFirstSearch(problem):
             for child in children:
                 childState = child[0]
                 
-                # Converts a tuple into list.
+                # Converts a tuple into list becuase tuple is immutable
                 childPath = list(currentPath)
 
                 childPath.append(child[1])
                 
                 if childState not in explored:
+                    explored.add(child[0])
                     queueNode.push([child[0], childPath])
 
 
