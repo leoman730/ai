@@ -297,9 +297,9 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
-        visitedCorners = [False,False,False,False]
+        visitedCorners = (False,False,False,False)
 
-        start = [self.startingPosition, visitedCorners]
+        start = (self.startingPosition, visitedCorners)
 
         return start
 
@@ -351,7 +351,7 @@ class CornersProblem(search.SearchProblem):
                     elif (nextx, nexty) == (1,self.top):
                         visitedCorners = toVisit[0], True, toVisit[2], toVisit[3]
                     elif (nextx, nexty) == (self.right,1):
-                        visitedCorners = toVisit[0], toVisit[0], True, toVisit[3]
+                        visitedCorners = toVisit[0], toVisit[1], True, toVisit[3]
                     elif (nextx, nexty) == (self.right,self.top):
                         visitedCorners = toVisit[0], toVisit[1], toVisit[2], True                        
 
